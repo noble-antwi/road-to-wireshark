@@ -120,7 +120,7 @@ When I start Wireshark, it shows all the available interfaces, including Etherne
 ![All Interfaces](images/001_interfaces.png)
 
 I learned to enable promiscuous mode in the capture options, which allows me to capture all traffic on the network, not just my own. I also discovered the snap length setting, which lets me capture only the headers (e.g., 64 bytes) to save space and avoid capturing sensitive payloads.
-<video controls src="videos/001_CapturingPackets.mp4" title="Capturing Traffic in Wireshark"></video>
+<video controls src="videos/001 Capturingpackets.mp4" title="First Capture"></video>
 
 Customizing the interface list to show only the ones I use regularly is another valuable lesson. I can manage these interfaces in the capture options by unchecking those I don't need. After configuring these settings, I can start capturing traffic by clicking "Start."
 ![Snaplink_Capture](images/002_Snaplinks.png)
@@ -133,6 +133,6 @@ I'll add screenshots from my laptop to illustrate these points.
 Setting up long-term capture in Wireshark is essential for troubleshooting intermittent issues and monitoring for cybersecurity threats. By using the capture options in the Wireshark interface, I can start capturing traffic on a selected interface and configure it to save the data to a permanent file. Instead of capturing one massive file, I learned to use a **ring buffer,** which captures several smaller files and overwrites the oldest files when the buffer is full. 
 ![CapturesPcaps](images/004_longTermcaptures.png)
 This setup helps manage disk space efficiently and makes it easier to pinpoint when an issue occurred. I also discovered that enabling promiscuous mode allows capturing all network traffic, not just traffic to and from my machine. Additionally, using the **pcapng** format over pcap provides more metadata, which is helpful for analysis. With these configurations, I can ensure continuous monitoring and have historical data available for when problems arise or if a security incident occurs. 
-<video controls src="videos/002_LOngtermCapture.mp4" title="Video Of Cpturing Process"></video>
 
+<video controls src="videos/002 Longtermcapture.mp4" title="Capturing Packets in Ring Buffer"></video>
 
