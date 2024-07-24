@@ -65,11 +65,74 @@ This section will be updated as I progress through the course, documenting my no
 Wireshark is an open-source packet analyzer used for network troubleshooting, analysis, software and protocol development, and education. It captures and interactively browses the traffic running on a computer network.
 
 ### Key Features:
-- **Live capture and offline analysis**
-- **Deep inspection of hundreds of protocols**
-- **Standard three-pane packet browser**
-- **Multi-platform support** (Windows, macOS, Linux, and UNIX)
-- **Rich VoIP analysis**
-- **Read/write many different capture file formats**
-- **Powerful display filters**
-- **Decryption support for many protocols**
+- Live capture and offline analysis
+- Deep inspection of hundreds of protocols
+- Standard three-pane packet browser**
+- Multi-platform support (Windows, macOS, and UNIX)
+- Rich VoIP analysis
+- Read/write many different capture file formats
+- Powerful display filters
+- Decryption support for many protocols
+
+## Section Five (5) : Where and How to Capture Packets
+
+#### Think BEFORE You Capture!
+
+In the module "Think Before You Capture," I learned the importance of planning before diving into packet analysis with Wireshark. First, identify who is affected by the issue, whether it's isolated or widespread, and whether it's consistent or intermittent. Determine which applications and servers are impacted and if they are local or cloud-based. Understanding the network path the traffic traverses is essential for a clean capture. By considering these factors beforehand, I can capture data more effectively and resolve issues faster.
+
+ #### How To Capture In a Switched Environment - Local Capture vs SPAN vs TAP
+
+In this module, I learned the following key points about capturing traffic in a switched environment:
+
+1. **Local Capture:** Installing Wireshark directly on an endpoint can be quick and easy but may strain the device's resources, especially on busy servers.
+2. **SPAN/Mirror:** This method involves configuring network devices to forward packets to a monitor port. It's crucial to avoid overloading the SPAN port by sending too much traffic.
+3. **Network TAP:** A TAP is a physical device inserted into the network path, providing a reliable way to capture traffic without burdening the network devices or endpoints.
+
+Understanding these methods helps ensure effective packet capturing in switched environments.
+
+### Capturing at Multiple Locations
+
+When troubleshooting network issues, especially performance problems, it's beneficial to capture traffic from multiple network points. Here are the key points I learned:
+
+1. **Client-Side Capture:** Capturing packets from the client can reveal local network conditions, broadcast activity, and the client's interactions with multiple servers.
+2. **Server-Side Capture:** Capturing packets from the server can show interactions with other backend services, such as application or database servers, which might be causing the slowdown.
+3. **Dual-Side Capture:** Capturing from both client and server sides helps in identifying issues like retransmissions and packet loss, offering a clearer picture of where the problem lies.
+
+This multi-point capture approach provides a comprehensive view of the network issue, making troubleshooting more effective.
+
+### Using Capture Filter?
+
+- **Capture Filter**: Allows you to collect only specific traffic based on criteria you set (e.g., TCP packets, traffic to/from a specific IP address).
+
+- **When to Use**:
+  - If you know exactly what you need and want to limit the amount of captured data.
+  - Useful in busy environments to focus on relevant traffic.
+
+- **When to Avoid**:
+  - If you are unsure of the issue or need to see all network activity, as capture filters might miss important traffic (e.g., backend server conversations).
+  - Specific filters might exclude useful information from other protocols (e.g., ICMP messages for troubleshooting TCP issues).
+
+- **Best Practice**:
+  - Capture all traffic initially and then use display filters to analyze data. This approach provides a more comprehensive view and aids in thorough troubleshooting.
+- ### Capturing traffic with Wireshark : User Interface
+
+When I start Wireshark, it shows all the available interfaces, including Ethernet and Wi-Fi. To begin capturing, I select the relevant interface and click the blue shark fin icon. To stop the capture, I click the red square icon.
+![All Interfaces](images/001_interfaces.png)
+
+I learned to enable promiscuous mode in the capture options, which allows me to capture all traffic on the network, not just my own. I also discovered the snap length setting, which lets me capture only the headers (e.g., 64 bytes) to save space and avoid capturing sensitive payloads.
+<video controls src="videos/001_CapturingPackets.mp4" title="Capturing Traffic in Wireshark"></video>
+
+Customizing the interface list to show only the ones I use regularly is another valuable lesson. I can manage these interfaces in the capture options by unchecking those I don't need. After configuring these settings, I can start capturing traffic by clicking "Start."
+![Snaplink_Capture](images/002_Snaplinks.png)
+
+I'll add screenshots from my laptop to illustrate these points.
+
+
+#### Long-Term Capture Configuration with Wireshark
+
+Setting up long-term capture in Wireshark is essential for troubleshooting intermittent issues and monitoring for cybersecurity threats. By using the capture options in the Wireshark interface, I can start capturing traffic on a selected interface and configure it to save the data to a permanent file. Instead of capturing one massive file, I learned to use a **ring buffer,** which captures several smaller files and overwrites the oldest files when the buffer is full. 
+![CapturesPcaps](images/004_longTermcaptures.png)
+This setup helps manage disk space efficiently and makes it easier to pinpoint when an issue occurred. I also discovered that enabling promiscuous mode allows capturing all network traffic, not just traffic to and from my machine. Additionally, using the **pcapng** format over pcap provides more metadata, which is helpful for analysis. With these configurations, I can ensure continuous monitoring and have historical data available for when problems arise or if a security incident occurs. 
+<video controls src="videos/002_LOngtermCapture.mp4" title="Video Of Cpturing Process"></video>
+
+
