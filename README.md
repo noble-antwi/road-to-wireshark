@@ -120,7 +120,9 @@ When I start Wireshark, it shows all the available interfaces, including Etherne
 ![All Interfaces](images/001_interfaces.png)
 
 I learned to enable promiscuous mode in the capture options, which allows me to capture all traffic on the network, not just my own. I also discovered the snap length setting, which lets me capture only the headers (e.g., 64 bytes) to save space and avoid capturing sensitive payloads.
-<video controls src="videos/001 Capturingpackets.mp4" title="First Capture"></video>
+
+
+<video controls src="videos/001 Capturingpackets.mp4" title="Capturing Pcaps"></video>
 
 Customizing the interface list to show only the ones I use regularly is another valuable lesson. I can manage these interfaces in the capture options by unchecking those I don't need. After configuring these settings, I can start capturing traffic by clicking "Start."
 ![Snaplink_Capture](images/002_Snaplinks.png)
