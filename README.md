@@ -139,6 +139,5 @@ Setting up long-term capture in Wireshark is essential for troubleshooting inter
 ![CapturesPcaps](images/004_longTermcaptures.png)
 This setup helps manage disk space efficiently and makes it easier to pinpoint when an issue occurred. I also discovered that enabling promiscuous mode allows capturing all network traffic, not just traffic to and from my machine. Additionally, using the **pcapng** format over pcap provides more metadata, which is helpful for analysis. With these configurations, I can ensure continuous monitoring and have historical data available for when problems arise or if a security incident occurs. 
 
-Video Below
-<video controls src="videos/002 Longtermcapture.mp4" title="Capturing Packets in Ring Buffer"></video>
+https://github.com/user-attachments/assets/9e9be351-a140-443f-bd93-fba261e203ec
 
