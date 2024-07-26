@@ -1,9 +1,6 @@
 # ROAD TO WIRESHARK
 
-<video src="road-to-wireshark\videos\001 Capturingpackets.mp4" width="320" height="240" controls></video>
-
-https://github.com/noble-antwi/road-to-wireshark/blob/f3c40d72b77ceafad7af9cb3f8c3398e317e6e70/videos/001%20Capturingpackets.mp4
-
+https://github.com/user-attachments/assets/9afcfb8e-9be0-478d-9b32-d6ba09ac67ee
 ## Introduction
 
 <video src="https://github.com/noble-antwi/road-to-wireshark/blob/f3c40d72b77ceafad7af9cb3f8c3398e317e6e70/videos/001%20Capturingpackets.mp4" width="320" height="240" controls></video>
