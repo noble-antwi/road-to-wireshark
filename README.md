@@ -1,9 +1,8 @@
 # ROAD TO WIRESHARK
 
-https://github.com/user-attachments/assets/9afcfb8e-9be0-478d-9b32-d6ba09ac67ee
+
 ## Introduction
 
-<video src="https://github.com/noble-antwi/road-to-wireshark/blob/f3c40d72b77ceafad7af9cb3f8c3398e317e6e70/videos/001%20Capturingpackets.mp4" width="320" height="240" controls></video>
 Welcome to the "Road to Wireshark" repository! This repository will document my learning journey as I dive deep into Wireshark, guided by the Udemy course **[Getting Started with Wireshark: The Ultimate Hands-On Course](https://www.udemy.com/course/wireshark-ultimate-hands-on-course/?couponCode=KEEPLEARNING)** by Chris Greer. This course is designed to make the intimidating world of packet analysis approachable and actionable, helping IT engineers and cybersecurity professionals enhance their network troubleshooting and analysis skills.
 This repo is dedicated to documenting my journey in learning Wireshark, a powerful network protocol analyzer. Below you'll find an outline of the topics I'll be covering, along with some initial resources and notes.
 
@@ -126,7 +125,8 @@ I learned to enable promiscuous mode in the capture options, which allows me to 
 
 **Capturing Packets** 
 
-<iframe width="560" height="315" src="https://github.com/user-attachments/assets/9afcfb8e-9be0-478d-9b32-d6ba09ac67ee" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media></iframe>
+https://github.com/user-attachments/assets/9afcfb8e-9be0-478d-9b32-d6ba09ac67ee
+----
 
 Customizing the interface list to show only the ones I use regularly is another valuable lesson. I can manage these interfaces in the capture options by unchecking those I don't need. After configuring these settings, I can start capturing traffic by clicking "Start."
 ![Snaplink_Capture](images/002_Snaplinks.png)
