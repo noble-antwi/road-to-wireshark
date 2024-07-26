@@ -74,7 +74,7 @@ Wireshark is an open-source packet analyzer used for network troubleshooting, an
 - Powerful display filters
 - Decryption support for many protocols
 
-## Section Five (5) : Where and How to Capture Packets
+## Section Five (5): Where and How to Capture Packets
 
 #### Think BEFORE You Capture!
 
@@ -120,6 +120,9 @@ When I start Wireshark, it shows all the available interfaces, including Etherne
 ![All Interfaces](images/001_interfaces.png)
 
 I learned to enable promiscuous mode in the capture options, which allows me to capture all traffic on the network, not just my own. I also discovered the snap length setting, which lets me capture only the headers (e.g., 64 bytes) to save space and avoid capturing sensitive payloads.
+
+
+https://github.com/user-attachments/assets/9afcfb8e-9be0-478d-9b32-d6ba09ac67ee
 
 
 <video controls src="videos/001 Capturingpackets.mp4" title="Capturing Pcaps"></video>
