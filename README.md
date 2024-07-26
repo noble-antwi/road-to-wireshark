@@ -1,5 +1,7 @@
 # ROAD TO WIRESHARK
 
+<video src="C:\Users\noble\Desktop\PROJECTS\road-to-wireshark\videos\001 Capturingpackets.mp4" width="320" height="240" controls></video>
+
 ## Introduction
 
 Welcome to the "Road to Wireshark" repository! This repository will document my learning journey as I dive deep into Wireshark, guided by the Udemy course **[Getting Started with Wireshark: The Ultimate Hands-On Course](https://www.udemy.com/course/wireshark-ultimate-hands-on-course/?couponCode=KEEPLEARNING)** by Chris Greer. This course is designed to make the intimidating world of packet analysis approachable and actionable, helping IT engineers and cybersecurity professionals enhance their network troubleshooting and analysis skills.
