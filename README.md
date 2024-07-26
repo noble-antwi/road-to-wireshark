@@ -126,8 +126,9 @@ I learned to enable promiscuous mode in the capture options, which allows me to 
 **Capturing Packets** 
 
 https://github.com/user-attachments/assets/9afcfb8e-9be0-478d-9b32-d6ba09ac67ee
-----
 
+
+---
 Customizing the interface list to show only the ones I use regularly is another valuable lesson. I can manage these interfaces in the capture options by unchecking those I don't need. After configuring these settings, I can start capturing traffic by clicking "Start."
 ![Snaplink_Capture](images/002_Snaplinks.png)
 
