@@ -212,6 +212,7 @@ dumpcap -i 4 -w C:\Users\noble\Desktop\PROJECTS\road-to-wireshark\pcaps\RingBuff
 - `-b filesize:500` sets the size of each file to 500 KB . If you need larger or smaller files, adjust this number accordingly.
 
 https://github.com/user-attachments/assets/00a68853-27e5-47ec-94e1-10539251bff2
+
 *Video Illustration Above*
 What’s great about this setup is that dumpcap will continuously capture traffic, rotating through the files. Once it reaches the maximum number of files (10 in this case), it will start overwriting the oldest files.
 
