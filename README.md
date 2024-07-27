@@ -221,7 +221,8 @@ This approach is particularly useful if you're capturing traffic in a busy envir
 ---
 
 Section Fice (5) Quiz Result
-![alt text](images/008_section%QuizResult.png)
+
+![QuizResult](images/008_sectionQuizResult.png)
 
 ---
 
