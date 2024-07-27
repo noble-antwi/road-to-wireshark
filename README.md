@@ -141,3 +141,89 @@ This setup helps manage disk space efficiently and makes it easier to pinpoint w
 
 https://github.com/user-attachments/assets/9e9be351-a140-443f-bd93-fba261e203ec
 
+## How to Capture on the Command Line with Dumpcap
+
+As I continue my studies in Wireshark, I've learned how to capture packets using Dumpcap directly from the command line. This method is particularly useful when working on busy servers or when I want a quick capture without using the full Wireshark GUI.
+
+### Accessing Dumpcap
+
+Dumpcap is included with Wireshark and is located in the Wireshark installation directory. To simplify access, I added the Wireshark installation directory to my system's PATH variable.
+
+### Adding Wireshark to PATH on Windows
+
+To add Wireshark to the PATH on Windows:
+
+1. Open Control Panel and go to System > Advanced system settings.
+2. In the Environment Variables section, find and edit the Path variable to include the Wireshark installation directory, typically `C:\Program Files\Wireshark`.
+
+![Adding Wireshark Variable](images/005_SettingEnvifomentVariables.png)
+
+### Using Dumpcap
+
+First, I opened the command prompt. To list all available network interfaces, I used:
+
+```sh
+dumpcap -D
+
+```
+This command displays all the interfaces I can capture from.
+
+![Availbale Interfaces](images/006_availableInterfaces.png)
+
+To start capturing on a specific interface, I used:
+
+```sh
+dumpcap -i [interface_number] -w [output_file]
+```
+For example, to capture on interface 4, which is my Wifi Interface as seen in the above image and write the output to test.pcapng, I used:
+```sh
+dumpcap -i 4 -w test.pcapng
+```
+To stop the capture, I simply pressed Ctrl + C.
+
+Watch the video below to appreciate the whole process
+
+https://github.com/user-attachments/assets/7571b97f-07e8-47de-86ec-b2fdad070da8
+
+!!!!Note Learning to use Dumpcap for command-line captures has been incredibly valuable, especially for quick, efficient captures in my cybersecurity work.
+
+
+----
+### Configuring a Ring-Buffer on the CLI
+
+When you want to capture traffic over an extended period using `dumpcap`, setting up a ring buffer on the command line is a game-changer. Here’s how you can do it:
+
+If you ever get stuck or forget how to use `dumpcap`, just type:
+
+```bash
+dumpcap -h
+```
+
+This will show you all the options you can use. But here’s a straightforward way to set up your ring buffer:
+![dampcaphelp](images/007_Dumpaph.png)
+```sh
+dumpcap -i 4 -w noble.pcapng -b files:10 -b filesize:100
+dumpcap -i 4 -w C:\Users\noble\Desktop\PROJECTS\road-to-wireshark\pcaps\RingBuffer\noble.pcapng -b files:10 -b filesize:100
+```
+
+- `-i 4` specifies the network interface you want to use. You may need to replace `4` with the correct interface number for your setup.
+- `-w noble.pcapng` names your capture file. You can choose any filename you like, not just "noble". NB: The directotry to the file is the `"C:\Users\noble\Desktop\PROJECTS\road-to-wireshark\pcaps\RingBuffer\"`
+- `-b files:10` sets the number of files in your ring buffer to 10. This means you will have a rotating set of 10 files.
+- `-b filesize:500` sets the size of each file to 500 KB . If you need larger or smaller files, adjust this number accordingly.
+
+https://github.com/user-attachments/assets/00a68853-27e5-47ec-94e1-10539251bff2
+*Video Illustration Above*
+What’s great about this setup is that dumpcap will continuously capture traffic, rotating through the files. Once it reaches the maximum number of files (10 in this case), it will start overwriting the oldest files.
+
+This approach is particularly useful if you're capturing traffic in a busy environment or on a server. It ensures you don't run out of disk space and keeps your capture going without needing manual intervention.
+
+---
+
+Section Fice (5) Quiz Result
+![alt text](images/008_section%QuizResult.png)
+
+---
+
+## SECTION SIX (6) : THE ANATOMY OF A PACKET -  HOW ENCAPSULATION WORKS
+
+### Packets and the OSI Model
