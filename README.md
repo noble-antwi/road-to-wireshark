@@ -229,3 +229,177 @@ Section Fice (5) Quiz Result
 ## SECTION SIX (6) : THE ANATOMY OF A PACKET -  HOW ENCAPSULATION WORKS
 
 ### Packets and the OSI Model
+
+Understanding the anatomy of a packet starts with the OSI model. Think of it as a guide to how different protocols interact and how various network devices fit into the communication process.
+
+The OSI model is a seven-layer framework used to describe network protocols and interactions:
+
+- **Application Layer**: Where applications and end-user services operate.
+- **Presentation Layer**: Responsible for data translation and encryption.
+- **Session Layer**: Manages sessions and connections between applications.
+- **Transport Layer**: Handles end-to-end communication and error recovery.
+- **Network Layer**: Manages packet forwarding including routing through different networks.
+- **Data Link Layer**: Responsible for node-to-node data transfer and error detection.
+- **Physical Layer**: Deals with the physical connection between devices, such as cables and hardware interfaces.
+  
+  ![OSIModeld](images/009_OSI_Model.png)
+Source: [What Are the 7 Layers of the OSI Model?](https://sparkbox.com/foundry/what_are_the_7_layers_of_the_OSI_model_network_of_communication)
+
+In practice, you might hear about network devices operating at specific layers, such as routers (network layer) and switches (data link layer). The OSI model helps in understanding where these devices and protocols function.
+
+Another commonly used model is the TCP/IP model, which simplifies the OSI model into four layers:
+
+- **Network Interface Layer**: Combines the OSI’s Physical and Data Link layers.
+- **Internet Layer**: Maps to the OSI’s Network layer.
+- **Transport Layer**: Corresponds to the OSI’s Transport layer.
+- **Application Layer**: Covers the OSI’s Application, Presentation, and Session layers.
+  
+![TCPIPLAyer](images/010_TCPIPLayer.png)
+Source: [TCP/IP Model](https://www.linkedin.com/pulse/tcpip-model-arshad-ali/)
+
+Click [here](https://www.youtube.com/watch?v=i9RL5jD9cTI) to view the comparism of the two types of models
+
+
+Protocols operate at different layers of these models. For instance, HTTP and FTP are application-layer protocols, while TCP and UDP are transport-layer protocols. Understanding which layer a protocol operates on is crucial for effective network analysis and troubleshooting.
+
+The key takeaway is that these models help in structuring how data is transmitted and received across networks. By understanding and using these models, you can better grasp how different protocols and devices interact and how to troubleshoot issues effectively.
+
+###  Ethernet - The Frame Header
+
+Ethernet operates at the **data link layer** (layer two) of the OSI model. In Wireshark, data is captured by the packet driver before being analyzed. The structure of the Ethernet frame is crucial for understanding how data is transmitted across a network.
+
+The Ethernet frame header consists of several key components:
+
+**Destination MAC Address (6 bytes)**: Specifies the intended recipient at layer two.
+
+**Source MAC Address (6 bytes)**: Identifies the sender.
+
+**EtherType Field (2 bytes)**: Indicates the protocol encapsulated in the payload.
+
+![EthernetFrame](images/011_EthernetFrame.png)
+Source: [The Ethernet II Frame Format](https://www.firewall.cx/networking/ethernet/ethernet-ii.html)
+
+
+The EtherType values have specific meanings:
+
+- `0x0800`: Indicates that the payload contains an IPv4 packet.
+- `0x0806`: Indicates an ARP (Address Resolution Protocol) packet.
+- `0x86DD`: Indicates an IPv6 packet.
+
+To explore this in Wireshark, you can open a capture file and look at the Ethernet frames. For example, the destination and source MAC addresses are displayed in hexadecimal format. The **EtherType** field tells you the protocol that follows Ethernet. Wireshark may not show the Frame Check Sequence (FCS) because the network interface card (NIC) often does not pass it to Wireshark. The FCS is a 4-byte checksum at the end of the frame, used for error-checking.
+
+![EthernetCapture](images/012_frameEtherne.png)
+
+To filter for non-IP traffic in Wireshark, use the filter `!(eth.type == 0x0800)`. This will show frames with other EtherType values, such as `0x86DD` for IPv6 or `0x0806` for ARP.
+
+When analyzing Ethernet frames:
+
+- **Frame**: Data at the Ethernet layer.
+- **Packet**: Data at the IP layer.
+- **Segment**: Data at the TCP layer.
+
+Errors at the frame level, such as FCS errors, indicate transmission issues. These errors are detected by the checksum included in the FCS. If a bit is altered during transmission, it will result in a checksum error, indicating that the frame was corrupted.
+
+### Key Takeaways
+
+- Ethernet frames contain destination and source MAC addresses, an EtherType field, and an optional FCS.
+- EtherType values help identify the encapsulated protocol.
+- Use Wireshark filters to identify non-IP traffic.
+- FCS checksums help detect transmission errors, contributing to reliable data communication.
+
+---
+
+### Unicasts vs Broadcasts vs Multicasts
+
+In my exploration of Ethernet, I delved into the concepts of unicast, broadcast, and multicast communications. Understanding these types is crucial for network packet analysis.
+
+#### Unicast
+Unicast communication occurs between a single source and a single destination. Each endpoint has a unique MAC address, and the communication is confined to these two devices. I won't be able to capture this traffic with Wireshark unless using a span, mirror, or tap, because switches only forward unicast packets to the designated interfaces.
+
+#### Broadcast
+Broadcast messages are sent to all devices in a network. In Wireshark, I can identify broadcast packets by looking at the destination MAC address, which is all "f's" (`ff:ff:ff:ff:ff:ff`). When a switch receives a broadcast, it sends the packet to all interfaces within the same VLAN. Every device in the VLAN receives the broadcast and decides whether to respond.
+
+#### Multicast
+Multicast communication is more selective, targeting multiple specific devices rather than all devices. Multicast packets are sent to a group of devices that are configured to listen for a specific multicast address. This is a "one-to-many" communication model. For instance, IPv6 multicast packets are only processed by devices listening for that specific multicast MAC address.
+
+#### Key Takeaways
+- **Unicast**: One-to-one communication, only between two specific devices.
+- **Broadcast**: One-to-everyone communication within the same VLAN, using a destination MAC address of all "f's".
+- **Multicast**: One-to-many communication, targeting devices configured to listen for a specific multicast address.
+
+Understanding these distinctions helps in analyzing network traffic and diagnosing network issues effectively.
+
+
+### The Internet Protocol - Learning the Header Values
+
+Moving up the OSI model to the network layer, I delved into the IPv4 header layout and its various fields. This layer primarily involves IPv4 and increasingly, IPv6.
+
+The **IPv4 header** includes the version, header length, differentiated services (Diff Srv), total length, identification number, flags, time to live (TTL), protocol, and source and destination IP addresses.
+
+- **Version**: Indicates IPv4 protocol.
+- **Header Length**: Specifies the header size.
+- **Differentiated Services (Diff Srv)**: Prioritizes certain traffic types, like VoIP.
+- **Total Length**: Includes both header and payload.
+- **Identification Number**: Tracks packets through the network, crucial for troubleshooting.
+- **Flags**: Manage packet fragmentation.
+- **Time to Live (TTL)**: Represents the number of hops a packet can take before being discarded. Each router decrements TTL, aiding in tracing the packet’s path.
+- **Protocol**: Specifies the type of payload: TCP (6), UDP (17), or ICMP (1), guiding Wireshark on protocol dissection.
+- **Source and Destination IP Addresses**: Ensure packets reach correct endpoints, remaining unchanged unless altered by NAT, PAT, or proxies.
+
+Understanding these fields is essential for network troubleshooting and maintaining smooth communication across the network.
+
+
+###  Following a Packet Through the Network - Re-Encapsulation
+
+
+Understanding IP as an end-to-end protocol versus Ethernet as a point-to-point protocol is key. Capturing at different network points shows how headers change. Here’s a simplified scenario to illustrate:
+![PointToPontEndtoEnd](images/013_pointtoppintandendtoendexplanation.png)
+Imagine a PC with IP 10.2 and MAC AA connected to a switch, which connects to a router (IP 10.1, MAC BB), another router (IP 11.1, MAC CC), and finally a server (IP 13.2, MAC FF).
+
+When the PC sends a frame, it includes the source and destination IP (10.2 to 13.2). However, the Ethernet frame’s MAC address targets the gateway first (BB). The router receives it, updates the frame for the next hop (CC to DD), and continues this process.
+
+Throughout the journey, the IP packet remains the same, but the Ethernet frame is re-encapsulated at each hop. This ensures proper delivery across various network segments. If network address translation (NAT) occurs, the IP addresses may change, affecting packet analysis. 
+
+This re-encapsulation process is crucial for understanding how data travels through a network and ensuring successful communication.
+
+### Lab 4: Analyzing a Packet From Multiple Capture Points
+
+In this lab assignment, I explored packet analysis from both the client and server perspectives, highlighting how ethernet and IP headers can appear differently depending on the vantage point. The key focus was on ethernet re-encapsulation.
+
+#### Client-Side Analysis
+
+I examined packet number two and found the following details:
+Link to Packet
+
+[Link to Client-Side  Packet](https://github.com/noble-antwi/road-to-wireshark/blob/main/pcaps/Module6_Assignment/udemy-client-slowfiledownload.pcapng)
+
+- **Destination MAC Address:** `00:00:0c:0c:00:0e`
+- **Source MAC Address:** `00:0c:29:65:3b:25`
+- **IP Identification Number:** `0x7e73` (Hexadecimal), which corresponds to `32771` in decimal.
+- **IP Time To Live (TTL):** `128`
+- **Source IP Address:** `192.168.1.10`
+
+#### Server-Side Analysis
+
+Switching to the server-side capture, specifically in `udemy-server-slowfiledownload.pcapng`, I identified:
+
+- **Corresponding Packet:** Frame Number `11`, matched using the filter `ip.id == 0x7e73`.
+- **Source MAC Address:** `00:00:0c:0c:00:ff`
+- **Destination MAC Address:** `00:06:5b:00:02:ff`
+- **IP ID:** `32371` (Decimal, equivalent to `0x7e73` in hexadecimal)
+- **IP TTL:** `127`
+
+From this analysis, it was observed that the packet passed through **one router** and there was **no NAT (Network Address Translation)** along the path.
+
+This exercise reinforced my understanding of how packets are encapsulated and how the same packet can be viewed differently from various points in the network.
+
+#### Practical Insights
+
+The continuity of the IP ID indicates no NAT or other devices that might alter the IP packet significantly. By using filters based on the IP ID, I can effectively trace the same packet across multiple captures. 
+
+For side-by-side analysis, I learned a useful trick: On Windows, you can open two instances of Wireshark to compare captures easily. On macOS, use the terminal command:
+
+```bash
+open -n /Applications/Wireshark.app
+```
+
