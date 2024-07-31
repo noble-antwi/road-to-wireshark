@@ -381,6 +381,8 @@ Link to Packet
 
 #### Server-Side Analysis
 
+[Link to Server Sude Packet](https://github.com/noble-antwi/road-to-wireshark/blob/420a9a9949f8f3ebf0708786a5e46f34973738e4/pcaps/Module6_Assignment/udemy-server-slowfiledownload.pcapng)
+
 Switching to the server-side capture, specifically in `udemy-server-slowfiledownload.pcapng`, I identified:
 
 - **Corresponding Packet:** Frame Number `11`, matched using the filter `ip.id == 0x7e73`.
@@ -391,6 +393,7 @@ Switching to the server-side capture, specifically in `udemy-server-slowfiledown
 
 From this analysis, it was observed that the packet passed through **one router** and there was **no NAT (Network Address Translation)** along the path.
 
+![PacketAnalysis](images/014_PacketAnalysis.png)
 This exercise reinforced my understanding of how packets are encapsulated and how the same packet can be viewed differently from various points in the network.
 
 #### Practical Insights
@@ -402,4 +405,122 @@ For side-by-side analysis, I learned a useful trick: On Windows, you can open tw
 ```bash
 open -n /Applications/Wireshark.app
 ```
+
+### Section Review
+
+In this module, I gained a foundational understanding of network protocols and their interactions, focusing on the following areas:
+
+**OSI and TCP Models:** We explored how these models structure network communication, ensuring that protocols operate within their designated layers without interfering with each other. For example, TCP and UDP can both function over IP without overlapping responsibilities.
+
+**Ethernet Frames:** I learned about the components of an Ethernet frame, including various header values and their significance. This understanding is crucial for interpreting how data is encapsulated for transmission.
+
+**IP Protocol:** We examined IP header values and their roles. This foundational knowledge is essential for analyzing IP traffic and will be built upon in further studies of the IP protocol.
+
+**Ethernet Re-Encapsulation:** The module explained how routers handle Ethernet frames. Routers strip off the existing Ethernet frame, re-encapsulate the IP packet into a new Ethernet frame, and forward it to the next destination. This process illustrates the dynamic nature of packet forwarding across networks.
+
+This recap solidifies my grasp of how network protocols are structured and interact. With these basics established, I am prepared to delve deeper into IP protocol troubleshooting and analysis in upcoming modules.
+
+---
+---
+
+# Section 7 : Practical IP Analysis
+
+In this module, the focus is on the practical application of IP header values and their analysis. The key objectives include:
+
+**Deep Dive into IP Headers:** The module will enhance my understanding of IP header values by exploring trace files. This hands-on approach will help me become more comfortable with interpreting these values.
+
+**Practical Exercises:** I will analyze real-world trace files to understand the IP header in action. This involves identifying and interpreting various header values to gain insights into network behavior.
+
+**Problem Solving:** I will review a broken example as a consultant, diagnosing and resolving issues based on the IP header information. This exercise is designed to apply theoretical knowledge to practical troubleshooting scenarios.
+
+This module aims to solidify my skills in analyzing IP headers and applying this knowledge to real-world problems, preparing me for more advanced troubleshooting and network analysis tasks.
+
+
+### Digging Deeper into the IP ID
+![IPIdnetification](images/015_IPIdentification.png)
+
+In this module, I explored the IP identification (IP ID) field in more detail and learned how to utilize it for network troubleshooting. Here's what I took away from this session:
+
+**Analyzing the IP ID:**
+I opened the client-side pcap from the previous exercise to focus on the IP ID and observe its behavior. By adding the IP ID as a column in Wireshark, I could easily see the IP ID values for each packet.
+
+**Incrementing IP IDs:**
+I noticed that the IP stack on the client side increments the IP ID by one for each packet sent. For example, starting at 371, the IP IDs incremented sequentially: 372, 373, 374, and so on. This pattern helps in tracking packets and understanding the flow of communication.
+
+**Different Directions, Different IP IDs:**
+In the opposite direction, the server's packets had a different starting range for IP IDs, such as 609, 610, 611. This difference indicates that IP ID values can vary based on the device and its operating system, which sometimes randomizes the starting point.
+
+**Sequential vs. Random IP IDs:**
+If a server is handling multiple conversations, the IP ID values may show significant jumps, indicating the server's busyness. For instance, if the IP ID jumps from 611 to 700 or 800, it suggests that the server is communicating with many other devices. However, not all systems behave this way, as some may randomize IP IDs, making this analysis less straightforward.
+
+**Practical Uses of IP ID:**
+I learned that monitoring the IP ID can be useful for tracking packets through a network and estimating how busy a system is. Although not always definitive, the IP ID provides valuable insights when analyzing network traffic and diagnosing issues.
+
+This deeper understanding of the IP ID field enhances my ability to troubleshoot network problems and analyze packet flows more effectively.
+
+### How to Use the TTL Field
+
+
+[Click to Open Link to the PCAP for the Exercise](https://github.com/noble-antwi/road-to-wireshark/blob/f0f540c392aec6201709ada3c1e1851753081398/pcaps/udemy-ping-fragmentation.pcapng)
+In this module, I delved into the practical applications of the Time to Live (TTL) field within Wireshark for network troubleshooting. This field, found in the IP header, holds valuable information about packet travel and can be a powerful diagnostic tool.
+
+**Understanding TTL Values:**
+I started by capturing packets using Wireshark and pinging a remote system (www.google.com). The TTL value in the ping response was 54. This TTL value can vary, typically starting at 64, 128, or 255, depending on the operating system and configuration of the device.
+
+![FIle Capture](images/016_CapturePacke.png)
+
+**Analyzing TTL for Troubleshooting:**
+By examining the TTL value in Wireshark, I observed that it provides insights into the number of hops (routers) a packet traverses. For example, if the initial TTL was 64 and the packet arrived with a TTL of 54, it indicates that the packet passed through 10 routers (64 - 54 = 10). This helps me gauge the distance between the source and destination in terms of network hops.
+
+**Practical Use Cases:**
+
+- **Estimating Distance:** By checking the TTL value, I can estimate how far a device is from the capture point. This is useful for understanding network topology and identifying potential bottlenecks.
+- **Identifying Network Latency:** The round-trip time (RTT) shown in the ping output, coupled with TTL values, gives a clear picture of network latency and the path packets take through the network.
+- **Observing Device Behavior:** Different devices handle TTL and IP ID values differently. For instance, some servers might randomize their IP ID values to prevent fingerprinting, making it harder to trace their identity. This module highlighted how my Mac system's IP stack starts TTL at 64 and randomizes IP ID values.
+![Packet Filter](images/017_FilterPacket.png)
+**Key Insights:**
+Monitoring TTL values is almost second nature when analyzing network flows. It helps me understand the number of hops and the network latency between devices. Even though some servers might not use the IP ID field or may randomize it, the TTL field remains a reliable metric for network troubleshooting.
+
+This deeper understanding of the TTL field enhances my ability to diagnose network issues and analyze packet flows more effectively.
+
+### How IP Fragmentation Works
+
+In this session, I learned about IP fragmentation, a critical process in networking that allows large packets to be broken down into smaller fragments for transmission across networks with varying maximum transmission units (MTUs).
+
+**IP Fragmentation Concept:**
+From its design, IP was built to handle packet fragmentation to ensure data could travel through routers with different MTU sizes. When a router encounters a packet larger than its MTU, it fragments the packet, sending the pieces separately. The final destination reassembles these fragments.
+
+**Generating Large Frames:**
+To observe fragmentation in action, I used a simple ping command. By sending a ping with a payload larger than the typical MTU (1500 bytes), I could see how my network handled large packets.
+
+```shell
+ping 192.168.4.1 -s 1600
+```
+This command sends a ping with a payload of 1600 bytes. Surprisingly, my network endpoint responded, indicating that fragmentation occurred.
+
+Analyzing Fragmentation in Wireshark:
+To see the fragmentation process, I captured the traffic with Wireshark. I filtered the capture to focus on packets to and from the pinged endpoint.
+
+In the capture, the first packet had a length of 1500 bytes, matching the MTU. The IP header, which is part of this 1500 bytes, was 20 bytes long. The 'More Fragments' flag was set, indicating additional fragments.
+
+![SettingMoreFragment](images/018_Fragmentation2.png)
+Setting of More Fragment Flag
+
+
+In the next packet, the 'More Fragments' flag was not set, but the fragment offset was set to 1480. This offset means the data in this packet starts at byte 1480 of the original message, following the first fragment which covered bytes 0 to 1479.
+
+![Fragment Flag Not Set](images/019_FragmentNotSet.png)
+
+**IP Identification Field:**
+Both fragments had the same IP ID, showing they belong to the same original packet. This ID helps the receiving endpoint reassemble the fragments correctly.
+![IP Field](images/020_IP_dentification.png)
+
+**Endpoint Reassembly:**
+The final endpoint reassembles the fragments using the IP ID and the fragmentation flags. Intermediate routers do not reassemble fragments; they pass them along until the final destination.
+
+**Fragmentation in Response:**
+The endpoint’s response mirrored the behavior: it received a fragmented ping request, reassembled it, and then fragmented its response due to the large payload.
+
+**Key Insights:**
+IP fragmentation ensures data integrity across networks with different MTU sizes. By breaking down and reassembling packets, it maintains the flow of data. This process is crucial for troubleshooting and understanding network behavior, especially when dealing with large packets and various network devices.
 
