@@ -494,7 +494,8 @@ From its design, IP was built to handle packet fragmentation to ensure data coul
 To observe fragmentation in action, I used a simple ping command. By sending a ping with a payload larger than the typical MTU (1500 bytes), I could see how my network handled large packets.
 
 ```shell
-ping 192.168.4.1 -s 1600
+ping 192.168.4.1 -l 1600
+
 ```
 This command sends a ping with a payload of 1600 bytes. Surprisingly, my network endpoint responded, indicating that fragmentation occurred.
 
