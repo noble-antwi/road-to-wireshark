@@ -525,3 +525,117 @@ The endpoint’s response mirrored the behavior: it received a fragmented ping r
 **Key Insights:**
 IP fragmentation ensures data integrity across networks with different MTU sizes. By breaking down and reassembling packets, it maintains the flow of data. This process is crucial for troubleshooting and understanding network behavior, especially when dealing with large packets and various network devices.
 
+### The IP Flags
+
+## Understanding the Do Not Fragment Bit
+
+In this lesson, I explored the importance of the "Do Not Fragment" (DF) bit in the IP header, a crucial aspect of network behavior and packet management.
+![Do Not Fragment Bit](images/021_Zero_Flag.png)
+
+ **Do Not Fragment Bit Explained**
+When the DF bit is not set, it signals the network that it's acceptable to fragment the packet if necessary. This flexibility is useful for ensuring data can traverse networks with varying maximum transmission units (MTUs). However, if the DF bit is set, it explicitly instructs the network not to fragment the packet under any circumstances.
+
+**Practical Implications**
+I looked at packet captures (pcaps) to see this in action. In the first packet of the capture, the DF bit was not set, indicating that fragmentation was allowed. This tells the network that the packet can be broken up to accommodate different MTU sizes.
+
+```plaintext
+DF bit not set: Fragmentation is allowed.
+DF bit set: Fragmentation is not allowed.
+```
+
+### Investigating Suspect Scan Activity
+
+#### Analyzing Network Scans with Fragmentation
+
+#### Understanding the Scenario
+
+[Link to pcap](https://github.com/noble-antwi/road-to-wireshark/blob/f0f540c392aec6201709ada3c1e1851753081398/pcaps/udemy-ip_frag_nmap_scan.pcapng)
+
+![Scanning](images/022_Scan.png)
+In this lesson, I dove into a fascinating example of network scan activity using IP fragmentation. This technique is often employed by attackers to evade detection systems like IDS and firewalls.
+
+#### The Setup
+I started by examining a provided packet capture (pcap) in Wireshark. The initial packets showcased a standard TCP handshake with SYN and SYN-ACK, followed by a reset. However, the interesting part began with a sequence of unusually small packets.
+
+#### Fragmentation Details
+One of the striking observations was the packet lengths. The packets were incredibly small, with total lengths of just 28 bytes. Considering that 20 bytes are used by the IP header, this leaves only 8 bytes for the actual payload. 
+
+Each fragment's structure was as follows:
+- The first packet (Packet 4) had a fragment offset of zero, indicating it started at byte 0.
+- The subsequent packets continued with the next set of bytes:
+  - Packet 5: Offset 8, covering bytes 8-15.
+  - Packet 6: Offset 16, covering bytes 16-23.
+
+#### Reassembly Process
+Wireshark’s ability to reassemble these fragments into a single coherent packet is incredibly useful. It identified the related fragments through their identical IP identification numbers and pieced them together. The final packet displayed in Wireshark is a TCP SYN, showcasing how the fragmented packets combine to form a complete request.
+
+#### Implications for Network Security
+Fragmentation can be leveraged by attackers to bypass security mechanisms. Systems that do not inspect fragmented packets thoroughly might allow these malicious payloads to slip through undetected. Recognizing such fragmented traffic is crucial for identifying potential scanning activity or attempts at lateral movement within a network.
+
+#### Key Insights
+This exercise highlighted the importance of being vigilant about fragmented traffic. Understanding how to recognize and analyze such patterns can be a significant advantage in network security. Monitoring for suspicious fragmentation can help in early detection of malicious activities and enhance overall network defense.
+
+This deeper dive into investigating suspect scan activity using fragmentation provides valuable insights into network security practices and reinforces the need for thorough traffic analysis.
+
+### A Look at IPv6
+
+#### Exploring IPv6 with Wireshark
+
+###### Getting Started with IPv6
+Even if IPv6 isn’t fully implemented in my environment, it's essential to understand it since it's the future of networking. I started by [downloading](https://github.com/noble-antwi/road-to-wireshark/blob/f0f540c392aec6201709ada3c1e1851753081398/pcaps/udemy-ipv6-peek.pcapng) the v6 sneak peek PCAP file to analyze the packets in Wireshark.
+
+
+######  DNS Lookup in IPv6
+Initially, I noticed the DNS lookup over IPv4, requesting an A record, which is standard for IPv4 addresses. Following this, the client also made a request for a quadruple A (AAAA) record, representing an IPv6 address. The DNS server responded with multiple IPv6 addresses, showcasing the shift from IPv4 to IPv6.
+
+###### Analyzing IPv6 Packets
+I found that IPv6 headers are significantly larger than IPv4 headers, 40 bytes compared to 20 bytes. Key differences in the IPv6 header include:
+
+- **Traffic Class:** Similar to the DiffServ tag in IPv4, indicating the data's priority and handling requirements.
+- **Flow Label:** A new addition in IPv6, allowing packets in the same flow to be treated together for more efficient routing.
+- **Hop Limit:** Replacing TTL (Time to Live) in IPv4, making more sense as it reflects the number of hops rather than time.
+- **Source and Destination Address:** Notable for their length and format. For example, addresses starting with FE80 indicate link-local addresses, similar to private IP addresses in IPv4. Addresses in the 2000 range are globally routable.
+
+#### Simplifying IPv6 Addresses
+IPv6 addresses can be condensed by replacing blocks of zeros with double colons (:::)), making them more manageable and readable.
+
+#### Observations and Takeaways
+IPv6 removes several elements present in IPv4, such as IPID, fragmentation, and certain flags, making it more efficient and forward-slooking. 
+
+### Conclusion
+This sneak peek into IPv6 has given me a solid foundation in understanding its headers and structure. With the increasing adoption of IPv6, being comfortable with these packets in Wireshark is crucial for effective network troubleshooting and optimization.
+
+### Configuring Wireshark to Find GeoIP Locations
+
+#### Adding GeoIP Information in Wireshark
+
+To enhance my packet analysis in Wireshark, I decided to configure it to find GeoIP locations for both IPv4 and IPv6 addresses. This allows me to see geolocation data such as city, country, and even latitude and longitude for IP addresses in my captures.
+
+####  Step-by-Step Guide
+
+First, I needed to download the GeoIP databases from MaxMind. These databases provide geolocation information for IP addresses. Here’s how I did it:
+
+1. **Sign Up and Download Databases**: I signed up for a free GeoLite2 account on the MaxMind website. This account allowed me to download the GeoLite2 databases. While they are less accurate than the paid versions, they are sufficient for most purposes. The free databases are updated about every six months.
+    - Downloaded GeoLite2 ASN
+    - Downloaded GeoLite2 City
+    - Downloaded GeoLite2 Country
+
+2. **Extract Databases**: After downloading, I extracted the GZip files into a local folder on my machine.
+
+3. **Configure Wireshark**: 
+    - Opened Wireshark and navigated to `Preferences`. On a Mac, it's under the Wireshark menu; on Windows or Linux, it's under `Edit -> Preferences`.
+    - In `Preferences`, I selected `Name Resolution`.
+    - At the bottom, I found `MaxMind database directories` and clicked `Edit`.
+    - Added the path to my new GeoIP database files by clicking `Add`, browsing to the directory, and selecting the appropriate folder.
+
+### Applying GeoIP Data in Packet Analysis
+
+Once the databases were configured, Wireshark could automatically display GeoIP information for IP addresses. This feature is invaluable for understanding the geographic distribution of network traffic and identifying potentially suspicious activity based on location.
+
+### Practical Use Case
+
+For instance, when analyzing a capture file, I could see GeoIP information in the IP header section of packets. This included Source GeoIP and Destination GeoIP, giving me immediate insight into the geographical origins and destinations of the traffic.
+
+### Conclusion
+
+Setting up GeoIP lookup in Wireshark has significantly enhanced my network analysis capabilities. By adding geolocation data to my packet captures, I can quickly identify and investigate traffic patterns based on geographical data, making my analysis more comprehensive and effective.
