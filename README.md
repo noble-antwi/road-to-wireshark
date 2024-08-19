@@ -600,7 +600,7 @@ I found that IPv6 headers are significantly larger than IPv4 headers, 40 bytes c
 IPv6 addresses can be condensed by replacing blocks of zeros with double colons (:::)), making them more manageable and readable.
 
 #### Observations and Takeaways
-IPv6 removes several elements present in IPv4, such as IPID, fragmentation, and certain flags, making it more efficient and forward-slooking. 
+IPv6 removes several elements present in IPv4, such as IPID, fragmentation, and certain flags, making it more efficient and forward-looking. 
 
 ### Conclusion
 This sneak peek into IPv6 has given me a solid foundation in understanding its headers and structure. With the increasing adoption of IPv6, being comfortable with these packets in Wireshark is crucial for effective network troubleshooting and optimization.
@@ -628,9 +628,11 @@ First, I needed to download the GeoIP databases from MaxMind. These databases pr
     - At the bottom, I found `MaxMind database directories` and clicked `Edit`.
     - Added the path to my new GeoIP database files by clicking `Add`, browsing to the directory, and selecting the appropriate folder.
 
+![Setting Up Geo Location](images/025_SettingUpGeoLoaction.png)
 ### Applying GeoIP Data in Packet Analysis
 
 Once the databases were configured, Wireshark could automatically display GeoIP information for IP addresses. This feature is invaluable for understanding the geographic distribution of network traffic and identifying potentially suspicious activity based on location.
+![Geo Locaion Showing](images/026_GeoLocationSHowing.png)
 
 ### Practical Use Case
 
@@ -639,3 +641,30 @@ For instance, when analyzing a capture file, I could see GeoIP information in th
 ### Conclusion
 
 Setting up GeoIP lookup in Wireshark has significantly enhanced my network analysis capabilities. By adding geolocation data to my packet captures, I can quickly identify and investigate traffic patterns based on geographical data, making my analysis more comprehensive and effective.
+
+
+
+----------------------
+
+
+
+### Analyzing a DDoS Attack with GeoIP - Personal Takeaways
+
+Today, I explored using GeoIP in Wireshark to analyze a DDoS attack. The trace file, *Udemy Strange Scan.pcapng*, revealed multiple IP addresses from various global locations, indicating a widespread scan. 
+
+![alt text](images/027_Address_Statistics.png)
+
+
+Using the GeoIP feature, I could identify the countries, cities, and autonomous system numbers associated with these IPs, providing valuable insights into the attack's origin.
+
+Mapping these IPs in a browser helped visualize their global spread. Despite some addresses being spoofed, the tool is effective for analyzing genuine IPs in real-world scenarios. I also practiced filtering traffic by country, which is crucial for narrowing down attack sources.
+![Map Representation](images/028_RepresentationInMaps.png)
+
+![Setting a Filter](images/029_RussisaAsaFilter.png)
+
+### Key Insights:
+- **GeoIP Integration**: Enhances analysis by revealing the geographical origin of IP addresses.
+- **Visual Mapping**: Useful for understanding the global distribution of attacks.
+- **Country Filtering**: Critical for isolating and analyzing traffic from specific regions.
+
+This exercise highlighted the practical value of GeoIP in cybersecurity forensics, particularly in threat analysis.
