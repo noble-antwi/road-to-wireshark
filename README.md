@@ -738,3 +738,23 @@ I added the IP ID and TTL as columns in Wireshark to observe these values across
 #### Conclusion and Key Learnings
 This lab was a hands-on exercise in identifying and analyzing scan activity through IP header values. The key takeaway is that such scans often involve spoofed IPs, which can be identified by looking for unusual patterns in IP IDs and TTL values. By understanding these patterns, I can better distinguish between legitimate traffic and potential threats, a crucial skill in cybersecurity.
 
+### Section 7: IP Analysis - Recap
+
+In Section 7, I delved into IP Analysis, focusing on both IPv4 and the introductory aspects of IPv6. This section provided a comprehensive look into the structure and functionality of IP headers, enhancing my understanding of network protocols.
+
+**IPv4 Header Breakdown:** I examined the IPv4 header in detail, learning to interpret the fields that define packet behavior and network communication.
+
+**IP Identification Number and TTL:** I explored the role of the IP identification number in managing packet fragmentation and reassembly. The TTL (Time to Live) field was analyzed for its importance in ensuring packets do not circulate indefinitely in the network.
+
+**Introduction to IPv6:** The module offered a preview of IPv6, contrasting it with IPv4 and highlighting advancements in modern network protocols.
+
+**IP Fragmentation:** The section covered how large packets are fragmented by network interfaces and subsequently reassembled. This was demonstrated through practical exercises involving large pings.
+
+**Wireshark for Fragmented Scans:** I learned to use Wireshark to identify fragmented scan activities. This hands-on experience helped me understand how fragmented packets appear in network traffic.
+
+**MaxMind GeoIP Databases:** Installing and configuring MaxMind GeoIP databases in Wireshark allowed me to map IP addresses geographically, providing insights into the origins of network traffic and scan activities.
+
+**Troubleshooting IP Headers:** The section included a practical troubleshooting exercise that involved analyzing IP headers, which solidified my understanding by applying theoretical concepts to real-world scenarios.
+
+Overall, this section deepened my knowledge of IP protocols and equipped me with valuable skills for network analysis and troubleshooting. I'm now prepared to build on this foundation as I progress to the next topic in the course.
+
