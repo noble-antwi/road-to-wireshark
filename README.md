@@ -819,3 +819,12 @@ Another critical aspect is packet loss. By looking at the RTP sequence numbers, 
 I also learned the importance of Differentiated Services (DiffServ) or Class of Service (CoS) in managing network traffic. DiffServ tags can prioritize VoIP traffic, reducing the likelihood of jitter and packet loss. However, if these tags are stripped away by a router or ISP, as I observed in one of the directions, it can lead to increased jitter.
 
 In essence, consistent packet timing and sequence numbers are key to maintaining good VoIP call quality. Monitoring these elements and ensuring that traffic prioritization is correctly applied can help troubleshoot and resolve issues effectively. This understanding reinforces how even small network configurations can have significant impacts on real-time services like VoIP and video streaming.
+
+# Personal Takeaway: Introduction to Practical TCP Analysis
+
+Diving into TCP for the first time feels like opening a new chapter in understanding how networks really work. The instructor's enthusiasm for TCP is infectious, and I’m beginning to see why mastering this protocol is so important. TCP is the backbone of reliable communication across networks, and I’m intrigued by how it ensures data gets to where it needs to go without errors.
+
+I haven’t yet explored concepts like the TCP handshake, sequence numbers, or the TCP window, but the idea of getting into the nitty-gritty of how data is transmitted and acknowledged across the internet sounds both challenging and exciting. I’m looking forward to digging into this protocol and understanding how it all fits together, especially as I start analyzing real-world network issues. This feels like the beginning of something that will really set the foundation for my skills in network troubleshooting.
+
+
+
