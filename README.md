@@ -820,11 +820,78 @@ I also learned the importance of Differentiated Services (DiffServ) or Class of 
 
 In essence, consistent packet timing and sequence numbers are key to maintaining good VoIP call quality. Monitoring these elements and ensuring that traffic prioritization is correctly applied can help troubleshoot and resolve issues effectively. This understanding reinforces how even small network configurations can have significant impacts on real-time services like VoIP and video streaming.
 
-# Personal Takeaway: Introduction to Practical TCP Analysis
+## Introduction to Practical TCP Analysis
 
 Diving into TCP for the first time feels like opening a new chapter in understanding how networks really work. The instructor's enthusiasm for TCP is infectious, and I’m beginning to see why mastering this protocol is so important. TCP is the backbone of reliable communication across networks, and I’m intrigued by how it ensures data gets to where it needs to go without errors.
 
 I haven’t yet explored concepts like the TCP handshake, sequence numbers, or the TCP window, but the idea of getting into the nitty-gritty of how data is transmitted and acknowledged across the internet sounds both challenging and exciting. I’m looking forward to digging into this protocol and understanding how it all fits together, especially as I start analyzing real-world network issues. This feels like the beginning of something that will really set the foundation for my skills in network troubleshooting.
 
 
+###  Analyzing DNS with Wireshark
 
+Getting into DNS analysis feels like unraveling a critical part of how the internet functions. DNS, often called the "phonebook of the internet," is what translates domain names into IP addresses, and it’s fascinating to see this in action through Wireshark.
+
+In my first dive into DNS analysis, I started by filtering for DNS packets in a PCAP file. Seeing a simple DNS query for `www.udemy.com` and understanding how it requests an A record (which maps to an IPv4 address) was eye-opening.
+![Filtering on DNS](images/033_dnsfilter.png)
+ Wireshark makes it easy to visualize the process by linking requests to their corresponding responses, which is incredibly useful. For example, in this case, the DNS query (packet 1) was quickly matched with its response (packet 3), giving the requested IP addresses.
+ 
+
+What struck me as particularly interesting was the timing aspect. Wireshark allows us to measure the time between the DNS request and response, which was 17 milliseconds for this query. 
+![DNS Time](images/034_lookingatdnsresponses.png)
+By applying a time filter (`DNS.time`), I could compare response times and even identify slower queries, like one that took 49 milliseconds. This kind of analysis helps in benchmarking DNS performance and troubleshooting slow DNS responses.
+![Extra DNS Filter](images/035_dnsresponsetimelower.png)
+
+Another cool feature is creating custom filters for slow DNS responses. For instance, filtering for `DNS.time > 0.04` allowed me to see all queries that took longer than 40 milliseconds. Setting this up as a "DNS slow" button in Wireshark can be a great tool for ongoing network monitoring.
+![DNs Filter with Slow Response Time](images/036_DNSfILETER.png)
+This experience has given me a practical understanding of how DNS works and how to effectively analyze it using Wireshark. I'm eager to explore more complex DNS scenarios and see how they influence network performance.
+
+ 🖥️ ## Practical TCP - The Handshake
+
+ As I dive into understanding TCP, the handshake stands out as a fundamental concept. TCP is connection-oriented, meaning it doesn't just send data blindly; it ensures a reliable connection through a handshake process. This handshake involves three key packets: **SYN**, **SYN-ACK**, and **ACK**.
+
+ Here's how it works: The client initiates the handshake by sending a SYN packet, saying, "Hey, server, I want to talk to you." This packet includes a high-numbered ephemeral port, like 50,000, to establish a unique connection. The server responds with a SYN-ACK, acknowledging the request and signaling that it's ready to communicate. Finally, the client sends an ACK to confirm the connection, and now, both ends are synchronized, ready to exchange data.
+
+ What fascinates me about TCP is its **stateful nature**—both the client and server maintain the connection's state. This means they both know when the connection is active and can reliably transmit data. If either side decides to close the connection, TCP shifts into a different state, tearing down the connection in a controlled manner.
+
+ This process ensures that even in the face of network instability, data can be reliably sent and received, making TCP a robust protocol for communication.
+
+ ---
+ ### Hands-On with TCP Flags
+
+Working with Wireshark, I opened the provided PCAP file named [*udemy-lecture59only-tcp-flags*](https://github.com/noble-antwi/road-to-wireshark/blob/f0f540c392aec6201709ada3c1e1851753081398/pcaps/udemy-lecture59only-tcp-flags.pcapng) ,    which contains exactly **9167 packets**. This session was focused on analyzing the TCP handshake, the sequence and acknowledgment numbers, and the TCP flags.
+
+![Length](images/037_totalpacket.png)
+
+#### Understanding the TCP Handshake
+
+I started by filtering the conversation to focus on TCP, which allowed me to isolate the two IP addresses involved and their respective port numbers. The client used a high-numbered ephemeral port, while the server communicated over port 445, which is associated with the Microsoft SMB protocol.
+
+Wireshark assigns a **Stream Index** to each unique combination of IP addresses and port numbers (referred to as a 4-tuple). This makes it easier to track multiple TCP threads occurring simultaneously.
+
+**Conversation completeness** was another interesting aspect. It tells us whether the PCAP captured the full TCP conversation, including the handshake, data exchange, and connection teardown (Fin or Reset). In this case, the conversation was incomplete, as the teardown was missing.
+
+#### Sequence and Acknowledgment Numbers
+
+The TCP sequence and acknowledgment numbers are crucial in tracking the flow of data between the client and server. The **Initial Sequence Number (ISN)** is the starting point for this numbering system. Although these numbers are quite large, Wireshark simplifies the analysis by displaying them as **relative sequence numbers** starting from zero.
+![Syn](images/038_SynRequest.png)
+When the client sends a sequence number, the server acknowledges it by incrementing the number by one and echoing it back. This exchange ensures that both parties are synchronized, hence the term **SYN** in the SYN, SYN-ACK, and ACK packets.
+![SynAck](images/039_synAck.png)
+
+![Ack](images/040_Ack.png)
+#### TCP Flags
+
+The TCP flags indicate the function of each packet. Here’s what I learned:
+
+- **SYN**: The SYN flag is set in the initial packet to establish a connection.
+- **SYN-ACK**: This combination appears in the response to a SYN packet, confirming the connection setup.
+- **ACK**: After the initial handshake, every packet will have the ACK flag set, except the initial SYN.
+- **Push (PSH)**: This flag indicates that the sender wants the data to be processed immediately without waiting for more data.
+- **Reset (RST)**: The RST flag is used to abruptly terminate a connection, like hanging up a phone call.
+- **Fin (FIN)**: This flag signals a graceful shutdown of the connection, where both parties agree to close the session.
+
+These flags are the key indicators of the state of a TCP connection, whether it's being established, actively transferring data, or being terminated.
+![flags](images/041_tcpflags.png)
+
+#### Conclusion
+
+This exercise deepened my understanding of how TCP operates at a low level, particularly how sequence and acknowledgment numbers synchronize data flow and how flags control the state of the connection. By working through the PCAP, I gained practical insights into TCP's inner workings, reinforcing the theory with real-world examples.
